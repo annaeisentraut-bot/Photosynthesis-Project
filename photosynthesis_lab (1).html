@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photosynthesis Lab: Change the Inputs</title>
+<style>
+  :root { --green:#24734a; --leaf:#dff3df; --ink:#19352a; --sun:#f5c451; --blue:#dceefa; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:#f5faf5; line-height:1.5; }
+  main { max-width:1000px; margin:0 auto; padding:24px 16px 40px; }
+  h1 { margin:0 0 8px; color:var(--green); font-size:clamp(1.8rem,4vw,2.5rem); }
+  .intro { margin-top:0; max-width:760px; }
+  .layout { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:18px; align-items:stretch; }
+  .panel { background:white; border:1px solid #d7e7d8; border-radius:16px; padding:20px; box-shadow:0 3px 12px #17351a0a; }
+  .control { margin:18px 0 22px; }
+  .control-head { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:7px; font-weight:bold; }
+  output { background:var(--leaf); border-radius:8px; padding:2px 9px; min-width:52px; text-align:center; }
+  input[type=range] { width:100%; accent-color:var(--green); cursor:pointer; }
+  .scale { display:flex; justify-content:space-between; font-size:.8rem; color:#52665b; }
+  .plant-scene { background:linear-gradient(#e9f7ff 0 68%,#d7edc9 68%); border-radius:14px; padding:12px; min-height:230px; display:flex; align-items:center; justify-content:center; }
+  svg { width:100%; max-width:360px; height:auto; }
+  .result { margin-top:16px; padding:16px; border-radius:12px; background:var(--leaf); }
+  .rate-row { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .rate { font-size:2rem; font-weight:800; color:var(--green); }
+  .meter { height:14px; background:#e5e9e5; border-radius:99px; overflow:hidden; margin:10px 0; }
+  .meter-fill { height:100%; width:0%; background:#2f965e; transition:width .2s; border-radius:99px; }
+  .outputs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+  .output-card { background:white; border:1px solid #cfe4d0; border-radius:10px; padding:12px; }
+  .output-card strong { display:block; font-size:1.15rem; }
+  .tag { display:inline-block; background:#fff0c8; border-radius:99px; padding:4px 10px; font-size:.85rem; font-weight:bold; }
+  .equation { text-align:center; font-weight:bold; padding:14px; background:#fff; border:1px dashed #a8c8ad; border-radius:12px; margin-top:18px; }
+  .note { font-size:.9rem; color:#4c6255; }
+  button { border:0; background:var(--green); color:white; padding:10px 14px; border-radius:9px; font-weight:bold; cursor:pointer; }
+  button:hover { background:#185b38; }
+  @media (max-width:700px) { .layout { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Photosynthesis Lab 🌿</h1>
+  <p class="intro">Change the amount of light, carbon dioxide, and water available to a plant. Watch the model estimate how the photosynthesis rate and products change.</p>
+  <div class="layout">
+    <section class="panel" aria-labelledby="controls-title">
+      <h2 id="controls-title">1. Adjust the ingredients</h2>
+      <div class="control">
+        <div class="control-head"><label for="light">Light intensity ☀️</label><output id="lightVal" for="light">70%</output></div>
+        <input id="light" type="range" min="0" max="100" value="70">
+        <div class="scale"><span>None</span><span>Strong</span></div>
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="co2">Carbon dioxide (CO₂) in air</label><output id="co2Val" for="co2">60%</output></div>
+        <input id="co2" type="range" min="0" max="100" value="60">
+        <div class="scale"><span>Very little</span><span>Plentiful</span></div>
+      </div>
+      <div class="control">
+        <div class="control-head"><label for="water">Water available 💧</label><output id="waterVal" for="water">80%</output></div>
+        <input id="water" type="range" min="0" max="100" value="80">
+        <div class="scale"><span>Very little</span><span>Plentiful</span></div>
+      </div>
+      <button id="reset" type="button">Reset experiment</button>
+      <p class="note">These percentages are relative model settings, not exact laboratory measurements.</p>
+    </section>
+    <section class="panel" aria-labelledby="model-title">
+      <h2 id="model-title">2. See what happens</h2>
+      <div class="plant-scene">
+        <svg viewBox="0 0 340 220" role="img" aria-label="Illustration of a green plant receiving sunlight, carbon dioxide, and water">
+          <circle cx="280" cy="35" r="23" fill="#f5c451"/>
+          <g stroke="#f5c451" stroke-width="4" stroke-linecap="round">
+            <path d="M280 4V-1 M280 66V72 M249 35H241 M311 35H320 M258 13L251 6 M302 57L309 64 M302 13L309 6 M258 57L251 64"/>
+          </g>
+          <path d="M165 188 Q163 140 171 85" fill="none" stroke="#2f7846" stroke-width="8" stroke-linecap="round"/>
+          <path d="M169 137 C118 133 91 101 108 82 C142 82 168 105 169 137Z" fill="#3d9b5d" stroke="#24734a" stroke-width="2"/>
+          <path d="M171 111 C184 72 226 62 245 76 C242 108 208 124 171 111Z" fill="#55b96f" stroke="#24734a" stroke-width="2"/>
+          <path d="M164 163 C127 164 115 143 121 128 C145 128 160 143 164 163Z" fill="#68bd78" stroke="#24734a" stroke-width="2"/>
+          <path d="M120 188 Q170 176 215 188 L205 211 L132 211Z" fill="#9c6c43"/>
+          <path d="M147 188 L147 201 M170 188 L170 205 M190 188 L190 201" stroke="#6b452c" stroke-width="2"/>
+          <g fill="#2570a8" font-size="12" font-weight="bold">
+            <text x="10" y="39">CO₂</text><text x="10" y="54">→</text>
+            <text x="17" y="177">H₂O</text><text x="45" y="178">→</text>
+          </g>
+          <path d="M70 40 Q95 45 113 78" fill="none" stroke="#2570a8" stroke-width="2" stroke-dasharray="4 4"/>
+          <path d="M69 175 Q101 179 132 191" fill="none" stroke="#2570a8" stroke-width="2" stroke-dasharray="4 4"/>
+          <path d="M257 57 Q229 70 208 87" fill="none" stroke="#d69a19" stroke-width="2" stroke-dasharray="4 4"/>
+          <text x="220" y="130" font-size="12" fill="#24734a" font-weight="bold">O₂ ↑</text>
+          <text x="215" y="146" font-size="11" fill="#24734a">released</text>
+        </svg>
+      </div>
+      <div class="result" aria-live="polite">
+        <div class="rate-row"><span><strong>Estimated photosynthesis rate</strong></span><span class="rate" id="rate">60%</span></div>
+        <div class="meter" aria-label="Photosynthesis rate meter"><div class="meter-fill" id="meterFill"></div></div>
+        <span class="tag" id="limiter">Main limit: CO₂</span>
+        <p id="explanation">Carbon dioxide is the least available input in this model, so it limits the rate.</p>
+      </div>
+      <div class="outputs">
+        <div class="output-card"><span>Glucose made</span><strong id="glucose">60 units</strong><span class="note">Energy-rich sugar</span></div>
+        <div class="output-card"><span>Oxygen released</span><strong id="oxygen">60 units</strong><span class="note">By-product</span></div>
+      </div>
+    </section>
+  </div>
+  <div class="equation">6 CO₂ + 6 H₂O + light energy → C₆H₁₂O₆ + 6 O₂</div>
+  <p class="note"><strong>How to interpret this model:</strong> Photosynthesis needs light, carbon dioxide, and water. This simplified limiting-factor model uses the lowest input percentage to estimate the rate, so adding more of an input that is already abundant may not increase the rate. Real plants also depend on temperature, enzymes, leaf condition, and other factors.</p>
+</main>
+<script>
+(function () {
+  const inputs = {
+    light: document.getElementById('light'),
+    co2: document.getElementById('co2'),
+    water: document.getElementById('water')
+  };
+  const names = { light: 'light', co2: 'CO₂', water: 'water' };
+  function update() {
+    const values = Object.fromEntries(Object.entries(inputs).map(([key, el]) => [key, Number(el.value)]));
+    Object.entries(values).forEach(([key, value]) => {
+      document.getElementById(key + 'Val').textContent = value + '%';
+    });
+    const rate = Math.min(values.light, values.co2, values.water);
+    const minimum = Math.min(values.light, values.co2, values.water);
+    const limiting = ['light', 'co2', 'water'].filter(key => values[key] === minimum);
+    document.getElementById('rate').textContent = rate + '%';
+    document.getElementById('meterFill').style.width = rate + '%';
+    document.getElementById('glucose').textContent = rate + ' units';
+    document.getElementById('oxygen').textContent = rate + ' units';
+    document.getElementById('limiter').textContent = limiting.length > 1
+      ? 'Joint limit: ' + limiting.map(key => names[key]).join(' + ')
+      : 'Main limit: ' + names[limiting[0]];
+    document.getElementById('explanation').textContent = rate === 0
+      ? 'At least one required input is at zero, so the model predicts no photosynthesis.'
+      : limiting.length > 1
+        ? 'The lowest inputs are tied, so they jointly limit the estimated rate. Increase them to test what changes.'
+        : names[limiting[0]] + ' is the least available input in this model, so it limits the estimated rate.';
+  }
+  Object.values(inputs).forEach(el => el.addEventListener('input', update));
+  document.getElementById('reset').addEventListener('click', () => {
+    inputs.light.value = 70; inputs.co2.value = 60; inputs.water.value = 80; update();
+  });
+  update();
+})();
+</script>
+</body>
+</html>
